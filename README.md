@@ -10,17 +10,12 @@ A **requirement gathering agent** for discretionary chat sessions. Users initiat
 
 ```mermaid
 flowchart TD
-    start["100K chat initiations/month"] --> ignore["60K ignore (60%)\n~10s session"]
+    start["100K chat initiations/month"] --> ignore["60K ignore (60%)\n~10s session\n(AgentCore $0.01 vs Lambda $0.08)"]
     start --> respond["40K user respond (40%)"]
-    respond --> cold["30K cold user\n~60s session"]
+    respond --> cold["30K cold user\n~60s session\n(AgentCore $0.06 vs Lambda $1.00)"]
     respond --> hot["10K hot client"]
-    hot --> busy["9K busy user\ncomplete within 8 hrs"]
-    hot --> keen["1K keen user\ncomplete in 10 mins"]
-
-    ignore --- ig_cost("AgentCore $0.01 vs Lambda $0.08")
-    cold --- co_cost("AgentCore $0.06 vs Lambda $1.00")
-    keen --- ke_cost("AgentCore $0.61 vs Lambda $10")
-    busy --- bu_cost("AgentCore $20 vs Lambda $50")
+    hot --> busy["9K busy user\ncomplete within 8 hrs\n(AgentCore $20 vs Lambda $50)"]
+    hot --> keen["1K keen user\ncomplete in 10 mins\n(AgentCore $0.61 vs Lambda $10)"]
 ```
 
 The busy 9% is the critical design driver -- these users keep sessions alive for hours but only actively chat for ~10 minutes total. This pattern heavily influences the architecture and cost comparison below.
